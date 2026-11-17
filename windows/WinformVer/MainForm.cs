@@ -25,20 +25,44 @@ namespace FirestickCleanup
             "com.amazon.device.telemetry.emitter", "com.amazon.wirelessmetrics.service",
             "com.amazon.shoptv.client", "com.amazon.shoptv.firetv.client", "com.amazon.sneakpeek",
             "com.amazon.ftv.screensaver", "com.amazon.storm.lightning.tutorial", "com.amazon.tmm.tutorial",
-            "com.amazon.tv.releasenotes", "com.amazon.device.rdmapplication", "com.amazon.logan",
+            "com.amazon.tv.releasenotes", "com.amazon.device.rdmapplication",
             "com.amazon.fireos.cirruscloud", "com.amazon.ods.kindleconnect", "com.amazon.tahoe",
             "com.amazon.aria", "com.amazon.hedwig", "com.amazon.tv.support", "com.amazon.ceviche",
             "com.amazon.d3", "com.amazon.tv.turnstile", "com.amazon.tv.ftvambient", "com.amazon.wifilocker",
-            "com.amazon.spiderpork", "com.amazon.tv.notificationcenter", "com.amazon.firebat",
+            "com.amazon.spiderpork", "com.amazon.tv.notificationcenter",
             "com.amazon.ssm", "com.amazon.ssmsys", "com.amazon.tv.easyupgrade", "com.amazon.dpcclient",
             "com.amazon.sharingservice.android.client.proxy", "com.amazon.privacypassservice",
-            "com.amazon.tv.legal.notices"
+            "com.amazon.tv.legal.notices",
+            // Ads, telemetry and setup helpers (from CleanYourTV's tested Fire TV Stick lists)
+            "com.amazon.kso.blackbird", "com.amazon.tv.developer.dataservice", "com.amazon.media.recommendations",
+            "com.amazon.uxnotification", "com.amazon.systemnotices", "com.amazon.tv.website_launcher",
+            "com.amazon.tv.ffsprovisioneeclient", "com.amazon.whisperjoin.middleware.np",
+            "com.amazon.whisperjoin.middleware.v2.np", "com.amazon.tv.legalresources", "com.amazon.device.sale.service",
+            "com.amazon.neo.minerva", "com.amazon.neo.minerva.logcat", "com.amazon.tv.fw.metrics",
+            // Dummy apps and unused Android components
+            "com.amazon.dummy.alarmclock", "com.amazon.dummy.calendar", "com.amazon.dummy.contacts",
+            "com.amazon.dummy.gallery", "com.amazon.dummy.music", "com.amazon.dummy.soundpicker",
+            "com.android.cts.ctsshim", "com.android.cts.priv.ctsshim", "com.android.protips", "com.android.dreams.basic",
+            "com.android.printspooler", "com.android.bips", "com.android.printservice.recommendation",
+            "com.android.bookmarkprovider", "com.android.calllogbackup", "com.android.smspush", "com.android.mms.service",
+            "com.android.hotspot2.osulogin", "com.android.traceur", "com.android.onetimeinitializer",
+            "com.android.carrierconfig", "com.android.safetyregulatoryinfo", "com.android.htmlviewer"
         };
 
         private static readonly string[] VideoServices =
         {
             "com.amazon.avls.experience", "com.amazon.prism.android.service", "com.amazon.dp.logger",
-            "com.amazon.livedeviceservice", "com.amazon.rtcsessioncontroller", "com.amazon.client.metrics.api"
+            "com.amazon.livedeviceservice", "com.amazon.rtcsessioncontroller", "com.amazon.client.metrics.api",
+            "com.amazon.firebat", // the Prime Video app itself
+            "com.amazon.tv.ottssocompanionapp"
+        };
+
+        private static readonly string[] AlexaExtras =
+        {
+            "com.amazon.aca", "com.amazon.aiondec", "com.amazon.alexa.datastore.app",
+            "com.amazon.alexadirectivebrokerservice", "com.amazon.alexa.externalmediaplayer.fireos",
+            "com.amazon.alexamediaplayer.runtime.ftv", "com.amazon.whad", "com.amazon.whasettings",
+            "com.amazon.wha.mediabrowserservice", "com.amazon.spotify.mediabrowserservice"
         };
 
         private readonly string adbPath;
@@ -327,6 +351,7 @@ namespace FirestickCleanup
             Log("  [OK] Notification listener enabled");
 
             await RunAdb($"-s {ip}:5555 shell appops set {PROJECTIVY_PKG} SYSTEM_ALERT_WINDOW allow");
+            await RunAdb($"-s {ip}:5555 shell dumpsys deviceidle whitelist +{PROJECTIVY_PKG}");
             Log("  [OK] Overlay permission granted");
 
             await RunAdb($"-s {ip}:5555 shell cmd role add-role-holder android.app.role.HOME {PROJECTIVY_PKG}");
@@ -352,11 +377,12 @@ namespace FirestickCleanup
             if (chkFreevee.Checked) list.Add("com.amazon.imdb.tv.android.app");
             if (chkMinitv.Checked) list.Add("com.amazon.minitv.android.app");
             if (chkGames.Checked) list.Add("com.amazon.gamehub");
-            if (chkLivetv.Checked) list.Add("com.amazon.tv.livetv");
+            if (chkLivetv.Checked) list.AddRange(new[] { "com.amazon.tv.livetv", "com.amazon.franktvinput", "com.amazon.tifobserver" });
             if (chkAlexa.Checked) { list.Add("com.amazon.tv.alexaalerts"); list.Add("com.amazon.tv.alexanotifications"); list.Add("com.amazon.audiohome"); }
+            if (chkAlexaExtras.Checked) list.AddRange(AlexaExtras);
             if (chkSilk.Checked) list.Add("com.amazon.cloud9");
-            if (chkSmarthome.Checked) list.Add("com.amazon.smarthomemapviewapp");
-            if (chkCast.Checked) list.Add("com.amazon.whisperplay.service.install");
+            if (chkSmarthome.Checked) list.AddRange(new[] { "com.amazon.smarthomemapviewapp", "com.amazon.tv.matter", "com.amazon.tv.mattercohost" });
+            if (chkCast.Checked) list.AddRange(new[] { "com.amazon.whisperplay.service.install", "com.amazon.awvflingreceiver", "com.amazon.cast.sink", "com.amazon.dialservice", "com.amazon.tcomm.jackson" });
             return list;
         }
 

@@ -282,6 +282,7 @@ fi
 echo "  [OK] Notification listener enabled"
 
 "$ADB" $TARGET_OPT shell appops set "$PROJECTIVY_PKG" SYSTEM_ALERT_WINDOW allow >>"$LOGFILE" 2>&1
+"$ADB" $TARGET_OPT shell dumpsys deviceidle whitelist +"$PROJECTIVY_PKG" >>"$LOGFILE" 2>&1
 echo "  [OK] Overlay permission granted"
 
 "$ADB" $TARGET_OPT shell cmd role add-role-holder android.app.role.HOME "$PROJECTIVY_PKG" >>"$LOGFILE" 2>&1
@@ -332,9 +333,10 @@ echo
 OPTIONAL_BLOAT=""
 
 echo "  Note: answer N to the next question if you use Prime Video,"
-echo "        Freevee, or MiniTV - disabling these breaks playback."
+echo "        Freevee, or MiniTV - this disables the Prime Video app"
+echo "        and the playback services those apps need."
 if yesno "  Disable Amazon Video services?         (Y/N): "; then
-    OPTIONAL_BLOAT="$OPTIONAL_BLOAT com.amazon.avls.experience com.amazon.prism.android.service com.amazon.dp.logger com.amazon.livedeviceservice com.amazon.rtcsessioncontroller com.amazon.client.metrics.api"
+    OPTIONAL_BLOAT="$OPTIONAL_BLOAT com.amazon.firebat com.amazon.avls.experience com.amazon.prism.android.service com.amazon.dp.logger com.amazon.livedeviceservice com.amazon.rtcsessioncontroller com.amazon.client.metrics.api com.amazon.tv.ottssocompanionapp"
 fi
 
 yesno "  Disable Amazon Appstore?              (Y/N): " && OPTIONAL_BLOAT="$OPTIONAL_BLOAT com.amazon.venezia"
@@ -343,11 +345,12 @@ yesno "  Disable Amazon Music?                  (Y/N): " && OPTIONAL_BLOAT="$OPT
 yesno "  Disable Freevee / IMDb TV?              (Y/N): " && OPTIONAL_BLOAT="$OPTIONAL_BLOAT com.amazon.imdb.tv.android.app"
 yesno "  Disable Amazon MiniTV?                 (Y/N): " && OPTIONAL_BLOAT="$OPTIONAL_BLOAT com.amazon.minitv.android.app"
 yesno "  Disable Amazon Game Hub?               (Y/N): " && OPTIONAL_BLOAT="$OPTIONAL_BLOAT com.amazon.gamehub"
-yesno "  Disable Amazon Live TV?                (Y/N): " && OPTIONAL_BLOAT="$OPTIONAL_BLOAT com.amazon.tv.livetv"
+yesno "  Disable Amazon Live TV?                (Y/N): " && OPTIONAL_BLOAT="$OPTIONAL_BLOAT com.amazon.tv.livetv com.amazon.franktvinput com.amazon.tifobserver"
 yesno "  Disable Alexa alerts/notifications?    (Y/N): " && OPTIONAL_BLOAT="$OPTIONAL_BLOAT com.amazon.tv.alexaalerts com.amazon.tv.alexanotifications com.amazon.audiohome"
+yesno "  Disable Alexa extras? (hints, multi-room audio, Alexa music; voice search keeps working) (Y/N): " && OPTIONAL_BLOAT="$OPTIONAL_BLOAT com.amazon.aca com.amazon.aiondec com.amazon.alexa.datastore.app com.amazon.alexadirectivebrokerservice com.amazon.alexa.externalmediaplayer.fireos com.amazon.alexamediaplayer.runtime.ftv com.amazon.whad com.amazon.whasettings com.amazon.wha.mediabrowserservice com.amazon.spotify.mediabrowserservice"
 yesno "  Disable Silk Browser (Amazon Cloud9)?  (Y/N): " && OPTIONAL_BLOAT="$OPTIONAL_BLOAT com.amazon.cloud9"
-yesno "  Disable Smart Home features?            (Y/N): " && OPTIONAL_BLOAT="$OPTIONAL_BLOAT com.amazon.smarthomemapviewapp"
-yesno "  Disable WhisperPlay (casting)?         (Y/N): " && OPTIONAL_BLOAT="$OPTIONAL_BLOAT com.amazon.whisperplay.service.install"
+yesno "  Disable Smart Home features?            (Y/N): " && OPTIONAL_BLOAT="$OPTIONAL_BLOAT com.amazon.smarthomemapviewapp com.amazon.tv.matter com.amazon.tv.mattercohost"
+yesno "  Disable WhisperPlay (casting)?         (Y/N): " && OPTIONAL_BLOAT="$OPTIONAL_BLOAT com.amazon.whisperplay.service.install com.amazon.awvflingreceiver com.amazon.cast.sink com.amazon.dialservice com.amazon.tcomm.jackson"
 
 echo
 echo "  [OK] Preferences saved. All tracking/telemetry/bloat will"
@@ -356,7 +359,7 @@ echo "       always be disabled regardless of choices above."
 # ============================================================
 # STEP 6: Disable bloatware
 # ============================================================
-BLOAT="com.amazon.tv.acr com.amazon.hybridadidservice com.amazon.perfc com.amazon.perfcollection com.amazon.device.telemetry.emitter com.amazon.wirelessmetrics.service com.amazon.shoptv.client com.amazon.shoptv.firetv.client com.amazon.sneakpeek com.amazon.ftv.screensaver com.amazon.storm.lightning.tutorial com.amazon.tmm.tutorial com.amazon.tv.releasenotes com.amazon.device.rdmapplication com.amazon.logan com.amazon.fireos.cirruscloud com.amazon.ods.kindleconnect com.amazon.tahoe com.amazon.aria com.amazon.hedwig com.amazon.tv.support com.amazon.ceviche com.amazon.d3 com.amazon.tv.turnstile com.amazon.tv.ftvambient com.amazon.wifilocker com.amazon.spiderpork com.amazon.tv.notificationcenter com.amazon.firebat com.amazon.ssm com.amazon.ssmsys com.amazon.tv.easyupgrade com.amazon.dpcclient com.amazon.sharingservice.android.client.proxy com.amazon.privacypassservice com.amazon.tv.legal.notices"
+BLOAT="com.amazon.tv.acr com.amazon.hybridadidservice com.amazon.perfc com.amazon.perfcollection com.amazon.device.telemetry.emitter com.amazon.wirelessmetrics.service com.amazon.shoptv.client com.amazon.shoptv.firetv.client com.amazon.sneakpeek com.amazon.ftv.screensaver com.amazon.storm.lightning.tutorial com.amazon.tmm.tutorial com.amazon.tv.releasenotes com.amazon.device.rdmapplication com.amazon.fireos.cirruscloud com.amazon.ods.kindleconnect com.amazon.tahoe com.amazon.aria com.amazon.hedwig com.amazon.tv.support com.amazon.ceviche com.amazon.d3 com.amazon.tv.turnstile com.amazon.tv.ftvambient com.amazon.wifilocker com.amazon.spiderpork com.amazon.tv.notificationcenter com.amazon.ssm com.amazon.ssmsys com.amazon.tv.easyupgrade com.amazon.dpcclient com.amazon.sharingservice.android.client.proxy com.amazon.privacypassservice com.amazon.tv.legal.notices com.amazon.kso.blackbird com.amazon.tv.developer.dataservice com.amazon.media.recommendations com.amazon.uxnotification com.amazon.systemnotices com.amazon.tv.website_launcher com.amazon.tv.ffsprovisioneeclient com.amazon.whisperjoin.middleware.np com.amazon.whisperjoin.middleware.v2.np com.amazon.tv.legalresources com.amazon.device.sale.service com.amazon.neo.minerva com.amazon.neo.minerva.logcat com.amazon.tv.fw.metrics com.amazon.dummy.alarmclock com.amazon.dummy.calendar com.amazon.dummy.contacts com.amazon.dummy.gallery com.amazon.dummy.music com.amazon.dummy.soundpicker com.android.cts.ctsshim com.android.cts.priv.ctsshim com.android.protips com.android.dreams.basic com.android.printspooler com.android.bips com.android.printservice.recommendation com.android.bookmarkprovider com.android.calllogbackup com.android.smspush com.android.mms.service com.android.hotspot2.osulogin com.android.traceur com.android.onetimeinitializer com.android.carrierconfig com.android.safetyregulatoryinfo com.android.htmlviewer"
 BLOAT="$BLOAT $OPTIONAL_BLOAT"
 
 DONE_PKGS=" "

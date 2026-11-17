@@ -271,6 +271,7 @@ echo   [OK] Notification listener enabled
 :: Overlay permission
 echo [STEP 4] Setting overlay permission... >>"%LOGFILE%"
 "%ADB%" %TARGET% shell appops set %PROJECTIVY_PKG% SYSTEM_ALERT_WINDOW allow >>"%LOGFILE%" 2>&1
+"%ADB%" %TARGET% shell dumpsys deviceidle whitelist +%PROJECTIVY_PKG% >>"%LOGFILE%" 2>&1
 echo   [OK] Overlay permission granted
 
 :: HOME role
@@ -334,7 +335,7 @@ set "OPTIONAL_BLOAT="
 echo   Note: answer N to the next question if you use Prime Video,
 echo         Freevee, or MiniTV — disabling these breaks playback.
 set /p "OPT_VIDEO=  Disable Amazon Video services?         (Y/N): "
-if /i "!OPT_VIDEO!"=="Y" set "OPTIONAL_BLOAT=!OPTIONAL_BLOAT! com.amazon.avls.experience com.amazon.prism.android.service com.amazon.dp.logger com.amazon.livedeviceservice com.amazon.rtcsessioncontroller com.amazon.client.metrics.api"
+if /i "!OPT_VIDEO!"=="Y" set "OPTIONAL_BLOAT=!OPTIONAL_BLOAT! com.amazon.firebat com.amazon.avls.experience com.amazon.prism.android.service com.amazon.dp.logger com.amazon.livedeviceservice com.amazon.rtcsessioncontroller com.amazon.client.metrics.api com.amazon.tv.ottssocompanionapp"
 
 :: Amazon Appstore
 set /p "OPT_APPSTORE=  Disable Amazon Appstore?              (Y/N): "
@@ -362,11 +363,14 @@ if /i "!OPT_GAMES!"=="Y" set "OPTIONAL_BLOAT=!OPTIONAL_BLOAT! com.amazon.gamehub
 
 :: Live TV
 set /p "OPT_LIVETV=  Disable Amazon Live TV?                (Y/N): "
-if /i "!OPT_LIVETV!"=="Y" set "OPTIONAL_BLOAT=!OPTIONAL_BLOAT! com.amazon.tv.livetv"
+if /i "!OPT_LIVETV!"=="Y" set "OPTIONAL_BLOAT=!OPTIONAL_BLOAT! com.amazon.tv.livetv com.amazon.franktvinput com.amazon.tifobserver"
 
 :: Alexa Voice Features
 set /p "OPT_ALEXA=  Disable Alexa alerts/notifications?    (Y/N): "
 if /i "!OPT_ALEXA!"=="Y" set "OPTIONAL_BLOAT=!OPTIONAL_BLOAT! com.amazon.tv.alexaalerts com.amazon.tv.alexanotifications com.amazon.audiohome"
+
+set /p "OPT_ALEXAX=  Disable Alexa extras? (hints, multi-room audio, Alexa music; voice search keeps working) (Y/N): "
+if /i "!OPT_ALEXAX!"=="Y" set "OPTIONAL_BLOAT=!OPTIONAL_BLOAT! com.amazon.aca com.amazon.aiondec com.amazon.alexa.datastore.app com.amazon.alexadirectivebrokerservice com.amazon.alexa.externalmediaplayer.fireos com.amazon.alexamediaplayer.runtime.ftv com.amazon.whad com.amazon.whasettings com.amazon.wha.mediabrowserservice com.amazon.spotify.mediabrowserservice"
 
 :: Silk Browser
 set /p "OPT_SILK=  Disable Silk Browser (Amazon Cloud9)?  (Y/N): "
@@ -374,11 +378,11 @@ if /i "!OPT_SILK!"=="Y" set "OPTIONAL_BLOAT=!OPTIONAL_BLOAT! com.amazon.cloud9"
 
 :: Smart Home
 set /p "OPT_SMARTHOME=  Disable Smart Home features?            (Y/N): "
-if /i "!OPT_SMARTHOME!"=="Y" set "OPTIONAL_BLOAT=!OPTIONAL_BLOAT! com.amazon.smarthomemapviewapp"
+if /i "!OPT_SMARTHOME!"=="Y" set "OPTIONAL_BLOAT=!OPTIONAL_BLOAT! com.amazon.smarthomemapviewapp com.amazon.tv.matter com.amazon.tv.mattercohost"
 
 :: WhisperPlay (casting)
 set /p "OPT_CAST=  Disable WhisperPlay (casting)?         (Y/N): "
-if /i "!OPT_CAST!"=="Y" set "OPTIONAL_BLOAT=!OPTIONAL_BLOAT! com.amazon.whisperplay.service.install"
+if /i "!OPT_CAST!"=="Y" set "OPTIONAL_BLOAT=!OPTIONAL_BLOAT! com.amazon.whisperplay.service.install com.amazon.awvflingreceiver com.amazon.cast.sink com.amazon.dialservice com.amazon.tcomm.jackson"
 
 echo.
 echo   [OK] Preferences saved. All tracking/telemetry/bloat will
@@ -390,7 +394,7 @@ echo.
 :: ============================================================
 
 :: Always-disable list: tracking, telemetry, shopping, and background junk
-set "BLOAT=com.amazon.tv.acr com.amazon.hybridadidservice com.amazon.perfc com.amazon.perfcollection com.amazon.device.telemetry.emitter com.amazon.wirelessmetrics.service com.amazon.shoptv.client com.amazon.shoptv.firetv.client com.amazon.sneakpeek com.amazon.ftv.screensaver com.amazon.storm.lightning.tutorial com.amazon.tmm.tutorial com.amazon.tv.releasenotes com.amazon.device.rdmapplication com.amazon.logan com.amazon.fireos.cirruscloud com.amazon.ods.kindleconnect com.amazon.tahoe com.amazon.aria com.amazon.hedwig com.amazon.tv.support com.amazon.ceviche com.amazon.d3 com.amazon.tv.turnstile com.amazon.tv.ftvambient com.amazon.wifilocker com.amazon.spiderpork com.amazon.tv.notificationcenter com.amazon.firebat com.amazon.ssm com.amazon.ssmsys com.amazon.tv.easyupgrade com.amazon.dpcclient com.amazon.sharingservice.android.client.proxy com.amazon.privacypassservice com.amazon.tv.legal.notices"
+set "BLOAT=com.amazon.tv.acr com.amazon.hybridadidservice com.amazon.perfc com.amazon.perfcollection com.amazon.device.telemetry.emitter com.amazon.wirelessmetrics.service com.amazon.shoptv.client com.amazon.shoptv.firetv.client com.amazon.sneakpeek com.amazon.ftv.screensaver com.amazon.storm.lightning.tutorial com.amazon.tmm.tutorial com.amazon.tv.releasenotes com.amazon.device.rdmapplication com.amazon.fireos.cirruscloud com.amazon.ods.kindleconnect com.amazon.tahoe com.amazon.aria com.amazon.hedwig com.amazon.tv.support com.amazon.ceviche com.amazon.d3 com.amazon.tv.turnstile com.amazon.tv.ftvambient com.amazon.wifilocker com.amazon.spiderpork com.amazon.tv.notificationcenter com.amazon.ssm com.amazon.ssmsys com.amazon.tv.easyupgrade com.amazon.dpcclient com.amazon.sharingservice.android.client.proxy com.amazon.privacypassservice com.amazon.tv.legal.notices com.amazon.kso.blackbird com.amazon.tv.developer.dataservice com.amazon.media.recommendations com.amazon.uxnotification com.amazon.systemnotices com.amazon.tv.website_launcher com.amazon.tv.ffsprovisioneeclient com.amazon.whisperjoin.middleware.np com.amazon.whisperjoin.middleware.v2.np com.amazon.tv.legalresources com.amazon.device.sale.service com.amazon.neo.minerva com.amazon.neo.minerva.logcat com.amazon.tv.fw.metrics com.amazon.dummy.alarmclock com.amazon.dummy.calendar com.amazon.dummy.contacts com.amazon.dummy.gallery com.amazon.dummy.music com.amazon.dummy.soundpicker com.android.cts.ctsshim com.android.cts.priv.ctsshim com.android.protips com.android.dreams.basic com.android.printspooler com.android.bips com.android.printservice.recommendation com.android.bookmarkprovider com.android.calllogbackup com.android.smspush com.android.mms.service com.android.hotspot2.osulogin com.android.traceur com.android.onetimeinitializer com.android.carrierconfig com.android.safetyregulatoryinfo com.android.htmlviewer"
 
 :: Append user's optional choices
 set "BLOAT=!BLOAT! !OPTIONAL_BLOAT!"

@@ -21,6 +21,7 @@ namespace FirestickCleanup
         private CheckBox chkGames;
         private CheckBox chkLivetv;
         private CheckBox chkAlexa;
+        private CheckBox chkAlexaExtras;
         private CheckBox chkSilk;
         private CheckBox chkSmarthome;
         private CheckBox chkCast;
@@ -55,6 +56,7 @@ namespace FirestickCleanup
             this.chkGames = new CheckBox();
             this.chkLivetv = new CheckBox();
             this.chkAlexa = new CheckBox();
+            this.chkAlexaExtras = new CheckBox();
             this.chkSilk = new CheckBox();
             this.chkSmarthome = new CheckBox();
             this.chkCast = new CheckBox();
@@ -109,6 +111,7 @@ namespace FirestickCleanup
             this.grpOptions.Controls.Add(this.chkGames);
             this.grpOptions.Controls.Add(this.chkLivetv);
             this.grpOptions.Controls.Add(this.chkAlexa);
+            this.grpOptions.Controls.Add(this.chkAlexaExtras);
             this.grpOptions.Controls.Add(this.chkSilk);
             this.grpOptions.Controls.Add(this.chkSmarthome);
             this.grpOptions.Controls.Add(this.chkCast);
@@ -122,7 +125,7 @@ namespace FirestickCleanup
             this.lblVideoWarning.Location = new Point(33, y); y += 36;
             this.lblVideoWarning.Size = new Size(310, 32);
             this.lblVideoWarning.ForeColor = Color.Firebrick;
-            this.lblVideoWarning.Text = "Leave UNCHECKED if you use Prime Video,\nFreevee, or MiniTV — disabling breaks playback.";
+            this.lblVideoWarning.Text = "Leave UNCHECKED if you use Prime Video, Freevee\nor MiniTV. Disables the Prime Video app too.";
 
             ConfigureCheck(this.chkAppstore,    "Disable Amazon Appstore", ref y);
             ConfigureCheck(this.chkPhotos,      "Disable Amazon Photos", ref y);
@@ -132,6 +135,7 @@ namespace FirestickCleanup
             ConfigureCheck(this.chkGames,       "Disable Amazon Game Hub", ref y);
             ConfigureCheck(this.chkLivetv,      "Disable Amazon Live TV", ref y);
             ConfigureCheck(this.chkAlexa,       "Disable Alexa alerts/notifications", ref y);
+            ConfigureCheck(this.chkAlexaExtras, "Disable Alexa extras (voice search still works)", ref y);
             ConfigureCheck(this.chkSilk,        "Disable Silk Browser", ref y);
             ConfigureCheck(this.chkSmarthome,   "Disable Smart Home features", ref y);
             ConfigureCheck(this.chkCast,        "Disable WhisperPlay (casting)", ref y);
