@@ -266,7 +266,7 @@ namespace FirestickCleanup
                 ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12;
                 using (var http = new HttpClient())
                 {
-                    http.DefaultRequestHeaders.UserAgent.ParseAdd("Firestick-Cleanup/1.2");
+                    http.DefaultRequestHeaders.UserAgent.ParseAdd("Firestick-Cleanup/1.4");
                     string json = await http.GetStringAsync("https://api.github.com/repos/spocky/miproja1/releases/latest");
                     var m = Regex.Match(json, @"""browser_download_url"":\s*""([^""]+\.apk)""");
                     if (m.Success) apkUrl = m.Groups[1].Value;
