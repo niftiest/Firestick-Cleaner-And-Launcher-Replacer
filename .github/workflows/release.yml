@@ -1,0 +1,68 @@
+# Builds the four release zips.
+# - Push to master / pull request: build and attach the zips to the run as an artifact.
+# - Push a tag like v1.5.0: build with that version and publish a GitHub release with the zips.
+#   If a release for the tag already exists (e.g. you wrote the notes by hand), the zips are
+#   uploaded to it instead.
+name: Build release zips
+
+on:
+  push:
+    branches: [master]
+    tags: ["v*"]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    runs-on: windows-latest
+    defaults:
+      run:
+        shell: bash
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Work out the version
+        id: version
+        run: |
+          if [[ "$GITHUB_REF" == refs/tags/v* ]]; then
+            version="${GITHUB_REF_NAME#v}"
+            echo "release=true" >> "$GITHUB_OUTPUT"
+          else
+            version="dev-${GITHUB_SHA::7}"
+            echo "release=false" >> "$GITHUB_OUTPUT"
+          fi
+          echo "version=$version" >> "$GITHUB_OUTPUT"
+          echo "Version: $version"
+
+      - name: Build the WinForms app
+        run: |
+          props=()
+          if [[ "${{ steps.version.outputs.release }}" == "true" ]]; then
+            v="${{ steps.version.outputs.version }}"
+            props=(-p:AssemblyVersion="${v%%-*}.0" -p:FileVersion="${v%%-*}.0" -p:InformationalVersion="$v")
+          fi
+          dotnet build windows/WinformVer/WinformVer.csproj -c Release -o build/winform "${props[@]}"
+
+      - name: Package the zips
+        run: python .github/scripts/package_release.py --version "${{ steps.version.outputs.version }}" --winform-dir build/winform --out dist
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: Firestick-Cleanup-${{ steps.version.outputs.version }}
+          path: dist/*.zip
+
+      - name: Publish the release
+        if: steps.version.outputs.release == 'true'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          tag="$GITHUB_REF_NAME"
+          if gh release view "$tag" >/dev/null 2>&1; then
+            gh release upload "$tag" dist/*.zip --clobber
+          else
+            gh release create "$tag" dist/*.zip --verify-tag \
+              --title "Firestick Cleaner & Launcher Replacer $tag" --generate-notes
+          fi
