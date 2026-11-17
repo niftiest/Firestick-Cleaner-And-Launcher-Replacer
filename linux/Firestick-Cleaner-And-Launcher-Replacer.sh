@@ -12,7 +12,7 @@ PROJECTIVY_PKG="com.spocky.projengmenu"
 PROJECTIVY_ACTIVITY="$PROJECTIVY_PKG/.ui.home.MainActivity"
 PROJECTIVY_ACCESSIBILITY="$PROJECTIVY_PKG/.services.ProjectivyAccessibilityService"
 PROJECTIVY_NOTIFICATION="$PROJECTIVY_PKG/.services.notification.NotificationListener"
-FALLBACK_APK_URL="https://github.com/spocky/miproja1/releases/download/4.68/ProjectivyLauncher-4.68-c82-xda-release.apk"
+FALLBACK_APK_URL="https://github.com/spocky/miproja1/releases/download/4.73/ProjectivyLauncher-4.73-c98-xda-release.apk"
 
 # Mac: strip the quarantine attribute Gatekeeper adds to downloaded binaries
 if [ "$(uname)" = "Darwin" ]; then
@@ -204,7 +204,8 @@ else
         | sed -E 's/.*"(https?:\/\/[^"]+\.apk)".*/\1/')
 
     if [ -z "$APK_URL" ]; then
-        echo "  [..] Could not parse latest release. Using known working version..."
+        echo "  [..] Could not reach the GitHub API (offline or rate-limited)."
+        echo "       Falling back to pinned Projectivy 4.73; it may not be the newest."
         APK_URL="$FALLBACK_APK_URL"
     fi
 

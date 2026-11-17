@@ -161,8 +161,9 @@ for /f "usebackq tokens=*" %%a in ("%TMPFILE%") do (
 )
 
 if not defined APK_URL (
-    echo   [..] Could not parse latest release. Using known working version...
-    set "APK_URL=https://github.com/spocky/miproja1/releases/download/4.68/ProjectivyLauncher-4.68-c82-xda-release.apk"
+    echo   [..] Could not reach the GitHub API ^(offline or rate-limited^).
+    echo        Falling back to pinned Projectivy 4.73; it may not be the newest.
+    set "APK_URL=https://github.com/spocky/miproja1/releases/download/4.73/ProjectivyLauncher-4.73-c98-xda-release.apk"
 )
 
 :: Trim any leading colon or space from URL

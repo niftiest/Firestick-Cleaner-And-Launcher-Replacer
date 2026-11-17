@@ -17,7 +17,7 @@ namespace FirestickCleanup
         private const string PROJECTIVY_ACTIVITY = PROJECTIVY_PKG + "/.ui.home.MainActivity";
         private const string PROJECTIVY_ACCESSIBILITY = PROJECTIVY_PKG + "/.services.ProjectivyAccessibilityService";
         private const string PROJECTIVY_NOTIFICATION = PROJECTIVY_PKG + "/.services.notification.NotificationListener";
-        private const string FALLBACK_APK_URL = "https://github.com/spocky/miproja1/releases/download/4.68/ProjectivyLauncher-4.68-c82-xda-release.apk";
+        private const string FALLBACK_APK_URL = "https://github.com/spocky/miproja1/releases/download/4.73/ProjectivyLauncher-4.73-c98-xda-release.apk";
 
         private static readonly string[] AlwaysDisabled =
         {
@@ -274,7 +274,7 @@ namespace FirestickCleanup
             }
             catch (Exception ex)
             {
-                Log($"  [..] Could not query GitHub API ({ex.Message}). Using fallback URL.");
+                Log($"  [..] Could not query the GitHub API ({ex.Message}). Falling back to pinned Projectivy 4.73; it may not be the newest.");
             }
 
             Log($"  [..] Downloading: {apkUrl}");
