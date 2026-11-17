@@ -65,9 +65,11 @@ def main():
         ],
     }
 
+    # Release builds are named ...-v1.4.0.zip; dev builds (version "dev-<sha>") get no "v".
+    label = f"v{args.version}" if args.version[:1].isdigit() else args.version
     os.makedirs(args.out, exist_ok=True)
     for name, entries in packages.items():
-        out = os.path.join(args.out, f"Firestick-Cleanup-{name}-v{args.version}.zip")
+        out = os.path.join(args.out, f"Firestick-Cleanup-{name}-{label}.zip")
         with zipfile.ZipFile(out, "w") as zf:
             for dest, mode, data in entries:
                 zf.writestr(zip_info(dest, mode), data)
